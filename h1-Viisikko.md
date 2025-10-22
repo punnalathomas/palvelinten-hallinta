@@ -16,6 +16,8 @@ Asennus tiivistettynä:
 5. Testataan onnistuiko asennus
 (Karvinen Salt install)
 
+Miksi Salt ei löydy Debianin vakiovarastosta, vaikka se on yleisesti käytetty?  
+
 ## Komentojen ajaminen lokaalisti
 
 Normaalisti Salttia käytetään hallitsemaan useita koneita verkon yli, mutta voimme myös testata Saltin käyttöä lokaalisti komentorivillämme. Tarkoituksena on siis harjoitella paikallisesti yhdellä koneella. (Karvinen Salt commands)  
@@ -30,9 +32,17 @@ Tärkeimmät state-funktiot:
 Saltin avulla voidaan siis määrittää tietty tila (state), esimerkiksi mitä koneella pitäisi olla, kuten tietty paketti asennettuna. Komento `sudo salt-call --local -l info state.single pkg.installed tree
 ` asentaa tree-ohjelma, jos sitä ei vielä ole. (Karvinen Salt commands)  
 
+Minkälaisissa tilanteissa työelämässä komentoja ajetaan lokaalisti yhdellä koneella?  
+
 ## Quickstart to Salt
 
+Kuinka Saltilla siis hallitaan useita koneita? Useiden koneiden hallintaan tarvitaan yksi ***Master***-palvelin, joka ohjaa muita ***Slave***-koneita. Hienous piileekin siinä, että vain Master tarvitsee julkisen IP-osoitteen, Slavet (minionit) voivat olla missä tahansa, koska yhteys toimii NAT:in ja palomuurien läpi. Master-palvelimen palomuuriin tulisi puhkaista reikä porteille 4505/tcp ja 4506/tcp, jotta yhteys toimii. Käytännössä Salt Master asennetaan yhdelle koneelle ja tämän jälkeen Salt Minion asennetaan ohjattaville koneille. Minion-koneille kerrotaan myös missä IP-osoitteessa Master sijaitsee. Tämän jälkeen minion-daemonia potkaistaan ja Master hyväksyy Minionin-avaimen, jolloin yhteys on valmis käyttöön. (Karvinen 2018)  
 
+Itseäni kiinnostaa tietää lisää siitä kuinka Master käytännössä löytää Minionit vaikka ne voivat olla "piilossa" siltä verkon yli.  
+
+## Raportin kirjoittaminen
+
+Karvisen (2006) mukaan raportin tulisi olla täsmällinen, helppolukuinen ja toistettava. Olen itse täysin samaa mieltä näistä. Erityisesti raportin tulisi olla helposti toistettavissa, myös henkilöille joilla ei olisi paljon kokemusta aiheesta. Raporttiin tulisi kiinnittää huomiota myös siitä näkökulmasta, että se myös kuvastaa itse tekijää. Hyvin tehty raportti näyttää muille, että olet vakavasti otettava tekijä ja herättää tietynlaisen luottamuksen lukijassa.  
 
 
 
@@ -46,5 +56,7 @@ Karvinen, T. 2025. Install Salt on Debian 13 Trixie. Luettavissa: https://teroka
 Karvinen, T. 2021. Run Salt Command Locally. Luettavissa: https://terokarvinen.com/2021/salt-run-command-locally/. Luettu: 22.10.2025  
 
 Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux. Luettavissa: https://terokarvinen.com/2018/03/28/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/. Luettu: 22.10.2025  
+
+Karvinen, T. 2006. Raportin kirjoittaminen. Luettavissa: https://terokarvinen.com/2006/06/04/raportin-kirjoittaminen-4/. Luettu: 22.10.2025  
 
 
