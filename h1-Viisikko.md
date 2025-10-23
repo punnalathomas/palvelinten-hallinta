@@ -46,7 +46,7 @@ Karvisen (2006) mukaan raportin tulisi olla täsmällinen, helppolukuinen ja toi
 
 ## Debianin asennus
 
-Asensin uuden Linux virtuaalikoneen Karvisen (2021) ohjeilla. Asennuksen yhteydessä latasin seuraavat ohjelmat: bash-completion, ufw, micro, tree ja curl. Asensin myös Guest Additions jolloin sain käyttöön leikepöydän ja paremmann resoluution.  
+Asensin uuden Linux virtuaalikoneen Karvisen (2021) ohjeilla. Asennuksen yhteydessä latasin seuraavat ohjelmat: bash-completion, ufw, micro, tree ja curl. Asensin myös Guest Additions jolloin sain käyttöön leikepöydän ja paremman resoluution.  
 
 ![kuva1](./Pictures/kuva1.png)  
 
