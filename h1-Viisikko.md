@@ -2,7 +2,10 @@
 
 ## Tiivistelmä
 
-Kysymys: Kuinka Terraform toimii saltstackin kanssa? Käytetäänkö niitä yhdessä kun rakennetaan ja ylläpidetään infrastrukuuria?
+Tämän raportin tavoitteet löytyvät Karvisen (2025) palvelintenhallinta spring 2025 -sivulta kohdasta: h1 Viisikko. Tehtävän suorittaminen meni yllättävän mutkattomasti ja suurempia ongelmia ei ilmennyt. Asensin uuden virtuaalikoneen ja huomasin, että tämä versio tuntuu jäätyilevän herkästi ja toimii muutenkin hitaammin. Veikkaan että tämä johtuu siitä, että asensin sen hitaammalle kiintolevylle lokaalilla koneellani. Suurin ero aikaisempaan virtuaalikoneeseen oli isompi muistinmäärä (60GB).  
+
+Kysymys: Kuinka Terraform toimii saltstackin kanssa? Käytetäänkö niitä yhdessä kun rakennetaan ja ylläpidetään infrastrukuuria?  
+
 ## Saltin asennus Debian 13
 
 Salt:in avulla voidaan siis hallita yhtä tai useampia Windows- ja Linux koneita. Salt ei ole saatavilla Debianin vakiovarastossa, joten joudumme asentamaan uuden apt-repositorion. Saadaksemme automaattiset päivitykset toimintaan, tarvitsee asentaa unattended-upgrades paketti, vaihtoehtoisesti päivitykset voidaan myös ajaa manuaalisesti komennoilla `sudo apt-get update; sudo apt-get dist-upgrade`. (Karvinen Salt install)  
