@@ -2,7 +2,7 @@
 
 ## Tiivistelmä
 
-Tämän raportin tavoitteet löytyvät Karvisen (2025) palvelintenhallinta spring 2025 -sivulta kohdasta: h1 Viisikko. Tehtävän suorittaminen meni yllättävän mutkattomasti ja suurempia ongelmia ei ilmennyt. Asensin uuden virtuaalikoneen ja huomasin, että tämä versio tuntuu jäätyilevän herkästi ja toimii muutenkin hitaammin. Veikkaan että tämä johtuu siitä, että asensin sen hitaammalle kiintolevylle lokaalilla koneellani. Suurin ero aikaisempaan virtuaalikoneeseen oli isompi muistinmäärä (60GB).  
+Tämän raportin tavoitteet löytyvät Karvisen (2025) palvelintenhallinta spring 2025 -sivulta kohdasta: h1 Viisikko. Tehtävän suorittaminen meni yllättävän mutkattomasti ja suurempia ongelmia ei ilmennyt. Asensin uuden virtuaalikoneen ja huomasin, että tämä versio tuntuu jäätyilevän herkästi ja toimii muutenkin hitaammin. Veikkaan että tämä johtuu siitä, että asensin sen hitaammalle kiintolevylle lokaalilla koneellani. Suurin ero aikaisempaan virtuaalikoneeseen oli isompi muistinmäärä (60GB). Raporttia tehtiin kolmena eri päivänä ja aikaa kului yhteensä noin 4 tuntia.    
 
 Kysymys: Kuinka Terraform toimii saltstackin kanssa? Käytetäänkö niitä yhdessä kun rakennetaan ja ylläpidetään infrastrukuuria?  
 
@@ -70,7 +70,7 @@ Seuraavaksi käytin komentoa `less salt.sources` ja sain seuraavanlaisen sisäll
 
 Sisältö näyttäisi olevan virallisista lähteistä.  
 
-Käytin komentoa `gpg --show-key --with-fingerprint public ` ja halusin tarkistaa, että fingerprint on oikea, mutta en löytänyt enään sivua mistä voisin tarkistaa onko avain oikea. Luotan tällä kertaa siihen, että se on, mutta tuotantoympäristössä tämä ei kävisi.  
+Käytin komentoa `gpg --show-key --with-fingerprint public ` ja halusin tarkistaa, että fingerprint on oikea, mutta en löytänyt enään sivua mistä voisin tarkistaa onko avain oikea. Luotan tällä kertaa että tiedostot ovat luotettavia, mutta tuotantoympäristössä tämä ei kävisi.  
 
 ![kuva3](./Pictures/kuva3.png)  
 
