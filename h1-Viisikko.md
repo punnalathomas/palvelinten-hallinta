@@ -51,11 +51,53 @@ Asensin uuden Linux virtuaalikoneen Karvisen (2021) ohjeilla. Asennuksen yhteyde
 
 ![kuva1](./Pictures/kuva1.png)  
 
-##
+## Saltin asennus
+
+Aloitin asentamalla **wget**:in komennoilla `sudo apt-get update` ja `sudo apt-get install wget`. Wgetin avulla voidaan ladata tiedostoja verkosta (Gnu 2020).  
+
+Ensin tarkastellaan että paketit tulevat oikeasti salt projektilta. Tein kansion saltrepo komennolla `mkdir saltrepo/` ja siirryin sinne komennolla `cd saltrepo/`. Tämän jälkeen latasin tiedostot Karvisen (2025) ohjeiden mukaan komennoilla:  
+```
+$ wget https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public
+$ wget https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources
+```
+
+Seuraavaksi käytin komentoa `less salt.sources` ja sain seuraavanlaisen sisällön komentoriville:  
+
+![kuva2](./Pictures/kuva2.png)  
+
+Sisältö näyttäisi olevan virallisista lähteistä.  
+
+Käytin komentoa `gpg --show-key --with-fingerprint public ` ja halusin tarkistaa, että fingerprint on oikea, mutta en löytänyt enään sivua mistä voisin tarkistaa onko avain oikea. Luotan tällä kertaa siihen, että se on, mutta tuotantoympäristössä tämä ei kävisi.  
+
+![kuva3](./Pictures/kuva3.png)  
+
+Seuraavaksi lisäsin avaimen luotettuihin projekteihin komennoilla:  
+```
+$ sudo cp public /etc/apt/keyrings/salt-archive-keyring.pgp
+$ sudo cp salt.sources /etc/apt/sources.list.d/
+```
+Tämän jälkeen asensin saltin komennoilla:  
+```
+$ sudo apt-get update
+$ sudo apt-get install salt-minion salt-master
+```
+Ensimmäinen asennuksen yritys jumitti koneen täysin ja jouduin ottamaan virran kokonaan irti siitä. Tästä lähdetäänkin katsomaan kuinka edetään seuraavaksi. Hyödynsin ChatGPT:tä ja ajoin uudelleen käynnistämisen jälkeen komennon `sudo dpkg --configure -a` tämän pitäisi viimeiställä jumittunut asennus ja se näytti toimivan. Testasin asennusta komennolla `salt --version` ja voidaan huomata että toimii!  
+
+![kuva4](./Pictures/kuva4.png)  
+
+Testasin vielä asennusta Karvisen (2025) ohjeella käyttämällä komentoa `sudo salt-call --local state.single file.managed /tmp/thomas
+	file /tmp/hellothomas created` ja se näytti toimivan hyvin, eli tehtiin uusi file hellothomas, koska sitä ei ollut vielä olemassa. 
+
+
+
+
+
 
 
 
 ## Lähteet
+GNU. 2020. GNU wget. Luettavissa: https://www.gnu.org/software/wget/. Luettu: 24.10.2025  
+
 Karvinen, T. 2025. Palvelinten Hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/. Luettu: 22.10.2025  
 
 Karvinen, T. 2025. Install Salt on Debian 13 Trixie. Luettavissa: https://terokarvinen.com/install-salt-on-debian-13-trixie/. Luettu: 22.10.2025  
