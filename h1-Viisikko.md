@@ -166,7 +166,19 @@ Näillä komennoilla haluttiin päästä tilaan, missä käyttäjä thomas2 löy
 
 ## Idempotentti
 
-Idempotentti tuottaa saman tuloksen, vaikka toiminto suoritettaisiin monta kertaa. Siinä määritetään siis tila mihin halutaan päästä ja jokainen suoritus tarkistaa ollaanko halutussa tilassa ja muuttaa sitä JOS EI olla halutussa tilassa.
+Idempotentti tuottaa saman tuloksen, vaikka toiminto suoritettaisiin monta kertaa. Siinä määritetään siis tila mihin halutaan päästä ja jokainen suoritus tarkistaa ollaanko halutussa tilassa ja muuttaa sitä JOS EI olla halutussa tilassa.  
+
+`sudo salt-call --local -l info state.single pkg.installed cowsay` tällä komennolla halutaan päästä tilaan, missä cowsay-paketti on asennettuna. `pkg.installed` on Saltin tila, joka varmistaa, että paketti on asennettu järjestelmään. Tuo komento tarkistaa onko cowsay asennettu. Jos se on funktio ei tee mitään, mutta jos se puuttuu, niin Salt asentaa sen ja lopuksi antaa raportin mitä tehtiin.  
+
+![kuva14](./Pictures/kuva14.png)  
+
+Kun komento ajetaan uudestaan, huomataan että Salt ei tee muutoksia mihinkään. Komennon suoritus onnistui ja raportista näkee, että se oli jo asennettuna.  
+
+![kuva15](./Pictures/kuva15.png)  
+
+Seuraavaksi ajoin komennon `sudo salt-call --local -l info state.single pkg.removed cowsay` kaksi kertaa, jolloin haluttu tila on cowsay-ohjelman puuttuminen järjestelmästä. Ensimmäisen kerran Salt poistaa ohjelman ja toisella kerralla Salt ei tee mitään, koska järjestelmä on halutussa tilassa.  
+
+![kuva16](./Pictures/kuva16.png)  
 
 
 
