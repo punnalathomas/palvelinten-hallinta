@@ -86,7 +86,18 @@ Ensimmäinen asennuksen yritys jumitti koneen täysin ja jouduin ottamaan virran
 ![kuva4](./Pictures/kuva4.png)  
 
 Testasin vielä asennusta Karvisen (2025) ohjeella käyttämällä komentoa `sudo salt-call --local state.single file.managed /tmp/thomas
-	file /tmp/hellothomas created` ja se näytti toimivan hyvin, eli tehtiin uusi file hellothomas, koska sitä ei ollut vielä olemassa. 
+	file /tmp/hellothomas created` ja se näytti toimivan hyvin, eli tehtiin uusi file hellothomas, koska sitä ei ollut vielä olemassa.  
+
+![kuva5](./Pictures/kuva5.png) 
+
+Asennuksen yhteydessä koneelle on luotu salt-minion, jonka toiminta voidaan varmistaa komennolla `sudo systemctl status salt-minion`.  
+
+![kuva6](./Pictures/kuva6.png)  
+
+Kuvasta voidaan huomata, että minion on toiminnassa. Error viestit johtuvat siitä ettei minion saa yhteyttä salt-masteriin.  
+
+## Tärkeimmät state-funktiot
+
 
 
 
