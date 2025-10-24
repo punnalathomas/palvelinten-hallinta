@@ -96,18 +96,84 @@ Asennuksen yhteydessä koneelle on luotu salt-minion, jonka toiminta voidaan var
 
 Kuvasta voidaan huomata, että minion on toiminnassa. Error viestit johtuvat siitä ettei minion saa yhteyttä salt-masteriin.  
 
-## Tärkeimmät state-funktiot
+## Tärkeimmät state-funktiot (Karvinen 2021)
+
+### pkg
+
+![kuva7](./Pictures/kuva7.png)  
+
+Ajoin komennon `sudo salt-call --local -l info state.single pkg.installed tree` Info tekstistä voidaan heti huomata, että kaikki tähän liittyvät paketit ovat jo asennettu.  
+1. ID on tree
+2. Funktiona ajetaan pkg.installed, eli halutaan päästä tilaan missä tree-paketti on asennettu
+3. Comment kertoo, että se on jo asennettu
+4. Voidaan myös huomata aloitusaika ja funktion ajamisen kesto
+5. Changes on tyhjä, koska muutoksia ei tehty
+6. Succeeded on 1, jolloin funktio toimi kuten haluttiin
+
+### file
+
+`sudo salt-call --local -l info state.single file.managed /tmp/thomas contents="foo"`  
+
+![kuva8](./Pictures/kuva8.png)  
+
+Tällä komennolla haluttiin päästä tilaan, missä on olemassa tiedosto thomas, jonka sisältö on foo.  
+1. ID, funktio ja result ovat samaan tapaan kuin edellisessä.
+2. Kommenttiin ilmestyi File /tmp/thomas updated, eli tämä luotiin koska sitä ei ollut
+3. Changes kertoo myös tiedoston luomisesta New file
+4. Succeeded 1 ja nyt erona pkg:en voidaan huomata changed 1
+5. cat /tmpt/thomas varmistettiin, että tiedosto luotiin ja sen sisältö on se mitä haluttiin  
+
+![kuva9](./Pictures/kuva9.png)  
+
+Tässä poistettiin kyseinen tiedosto file.absent funktiolla. Cat:illa varmistettiin, että tiedostoa ei ole enään.  
+
+### service
+
+`sudo salt-call --local -l info state.single service.running ufw enable=True`  
+
+![kuva10](./Pictures/kuva10.png)  
+
+Tällä funktiolla nähdään on daemon halutussa tilassa, eli oma komentoni katsoo onko palomuuri ylhäällä. Tässä tilanteessa palomuuri on ylhäällä, joten ei tehty muutoksia. Tämä voidaan huomata helpoiten Comment-osiosta. Tuo komento myös käynnistäisi palomuurin, jos se olisi ollut pois päältä.  
+
+### user
+
+`sudo salt-call --local -l info state.single user.present thomas2` ja `sudo salt-call --local -l info state.single user.absent thomas2`  
+
+![kuva11](./Pictures/kuva11.png)  
+
+![kuva12](./Pictures/kuva12.png)  
+
+Näillä komennoilla haluttiin päästä tilaan, missä käyttäjä thomas2 löytyy järjestelmästä ja tämän jälkeen tilaan, missä thomas2 ei ole järjestelmässä.  
+1. Haluttu tila saavutettiin onnistuneesti
+2. Luotiin käyttäjä, koska sitä ei ollut vielä
+3. Käyttäjälle lisättiin myös kotihakemisto
+4. Käyttäjä lisättiin omaan ryhmään
+5. Tämän jälkeen ajoin user.absent-komennon
+6. Kommenteista voidaan huomata, että käyttäjä thomas2 on poistettu
+7. Changes kohdassa mainitaan thomas2 removed ja thomas2 group removed
+
+### cmd
+
+`sudo salt-call --local -l info state.single cmd.run 'touch /tmp/foo' creates="/tmp/foo"`  
+
+![kuva13](./Pictures/kuva13.png)  
+
+1. Cmd.run ajaa komentorivikäskyn shellissä
+2. Touch /tmp/foo suoritetaan, eli luodaan tiedosto jos sitä ei ole vielä olemassa
+3. Creates="/tmp/foo" ajaa komennon vain jos tuota tiedostoa ei ole vielä olemassa
+4. Ilman tuota ehtoa Salt ajaisi komennon jokakerta. Tämä johtuu siitä, että cmd.run ei ole tietoinen Saltin tilasta, eli se vain ajaa sitä uudestaan ja uudestaan, jos ehtoa ei lisätä komentoon. (saltstack)
 
 
+## Idempotentti
 
-
-
-
+Idempotentti tuottaa saman tuloksen, vaikka toiminto suoritettaisiin monta kertaa. Siinä määritetään siis tila mihin halutaan päästä ja jokainen suoritus tarkistaa ollaanko halutussa tilassa ja muuttaa sitä JOS EI olla halutussa tilassa.
 
 
 
 ## Lähteet
 GNU. 2020. GNU wget. Luettavissa: https://www.gnu.org/software/wget/. Luettu: 24.10.2025  
+
+Ifloadfocus. Mikä on Idempotenssi. Luettavissa: https://loadfocus.com/fi-fi/glossary/what-is-idempotency. Luettu: 24.10.2025  
 
 Karvinen, T. 2025. Palvelinten Hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/. Luettu: 22.10.2025  
 
@@ -120,5 +186,7 @@ Karvinen, T. 2021. Install Debian on Virtualbox - Updated 2024. Luettavissa: htt
 Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux. Luettavissa: https://terokarvinen.com/2018/03/28/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/. Luettu: 22.10.2025  
 
 Karvinen, T. 2006. Raportin kirjoittaminen. Luettavissa: https://terokarvinen.com/2006/06/04/raportin-kirjoittaminen-4/. Luettu: 22.10.2025  
+
+Saltstack. salt.states.cmd. Luettavissa: https://salt-zh.readthedocs.io/en/latest/ref/states/all/salt.states.cmd.html. Luettu: 24.10.2025  
 
 
