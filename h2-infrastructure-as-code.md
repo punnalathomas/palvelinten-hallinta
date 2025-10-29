@@ -79,7 +79,7 @@ Päivällinen:
     - suklaakakku
 ```
 
-YAML käyttää sisennyksiä rakenteessaan. Käytä sisennykseen välilyöntejä, normaalisti kaksi välilyöntie per taso.  
+YAML käyttää sisennyksiä rakenteessaan. Käytä sisennykseen välilyöntejä, normaalisti kaksi välilyöntiä per taso.  
 (Salt YAML)  
 
 ### Top file
