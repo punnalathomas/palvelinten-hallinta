@@ -34,7 +34,58 @@ Eli tässä Saltille annetaan ohjeeksi käsitellä tiedostoa `hellothomas`, joka
 
 Kun moduuli on luotu, sitä voidaan ajaa lokaalisti komennolla `sudo salt-call --local state.apply [moduulin nimi]`. Tämä tulostaa komentoriville tulosteen, mistä näkee Saltin tekemät mahdolliset muutokset. Lopuksi on hyvä tarkistaa vielä eri työkalulla, että koodimme toimi halutulla tavalla, esimerkiksi `ls /tmp/hellothomas`. (Karvinen 2024)  
 
-### Salt overview
+### Salt overview YAML
+
+YAML on merkintäkieli. YAML renderöijä muuttaa YAML-datarakenteen Pythonin tietorakenteeksi, jota Salt käsittelee (Salt).  
+
+Perussäännöt:  
+1. Data muodostuu **avain**:**arvo** -pareista
+2. Ne erotetaan kaksoipisteellä (:) ja yhdellä välilyönnillä
+3. Avaimen arvo voi olla tyypiltää esimerkiksi teksti, numero, lista tai sanakirja
+4. Avaimet ovat case-sensitive
+5. Käytä välilyöntejä, ei tabulaattoria
+6. Kommentti alkaa #
+
+YAML kolme peruselementtiä:  
+
+1. Scalars - avain-arvo-parit.  
+```
+eläin: kissa
+hedelmä: omena
+```
+
+2. Lista, eli avaimen jälkeen tulee luettelo arvoista. Arvot alkavat yhdysmerkillä (-).  
+```
+eläin:
+  - kissa
+  - koira
+  - leijona
+
+hedelmä:
+  - omena
+  - mandariini
+```
+
+3. Sanakirja, eli kokoelma avain-arvo-pareja ja listoja.  
+```
+Päivällinen:
+  alkupala: salaatti
+  juoma: vesi
+  pääruoka:
+    - pihvi
+    - muusi
+    - kastike
+  jälkiruoka:
+    - suklaakakku
+```
+
+YAML käyttää sisennyksiä rakenteessaan. Käytä sisennykseen välilyöntejä, normaalisti kaksi välilyöntie per taso.  
+(Salt YAML)  
+
+### Top file
+
+
+
 
 
 
