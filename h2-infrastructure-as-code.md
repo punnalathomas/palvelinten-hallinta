@@ -82,7 +82,14 @@ Päivällinen:
 
 ### Top file
 
+Top-filen avulla voidaan esimerkiksi ajaa uudet konfiguraatiot käyttöön kaikille minion koneille. Konfiguraatiot voidaan määrittää esimerkiksi ryhmien mukaan, esimerkiksi kaikki minionit joiden nimi alkaa sanalla "web" suorittavat apache.sls state-filen. (Topfile 2025)    
+```
+base:         # oletusympäristö
+  'web*':     # kaikki minionit, joiden id alkaa merkkijonolla 'web'
+    - apache  # ajetaan tilatiedosto apache.sls
+```
 
+## Tehtävät
 
 
 
@@ -102,7 +109,9 @@ Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/p
 
 Karvinen, T. 2024. Hello Salt Infra-as-Code. Luettavissa: https://terokarvinen.com/2024/hello-salt-infra-as-code/. Luettu: 29.10.2025  
 
-Saltproject. Salt overview. Luettavissa: https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#rules-of-yaml. Luettu: 29.10.2025  
+Saltproject. Salt overview YAML. Luettavissa: https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#rules-of-yaml. Luettu: 29.10.2025  
+
+Saltproject. 2025. THE TOP FILE. Luettavissa: https://docs.saltproject.io/en/latest/ref/states/top.html. Luettu: 29.10.2025  
 
 
 
