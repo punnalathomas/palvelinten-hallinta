@@ -77,9 +77,7 @@ Päivällinen:
     - kastike
   jälkiruoka:
     - suklaakakku
-```
-
-YAML käyttää sisennyksiä rakenteessaan. Käytä sisennykseen välilyöntejä, normaalisti kaksi välilyöntiä per taso.  
+```  
 (Salt YAML)  
 
 ### Top file
