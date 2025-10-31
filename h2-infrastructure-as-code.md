@@ -107,9 +107,44 @@ Ajoin komennon `sudo salt-call --local state.apply hello` ja huomasin, että en 
 
 ![kuva18](./Pictures/kuva18.png)
 
+(Karvinen 2024)  
 
+### Topping
 
+Siirryin hakemistossa kohtaan /srv/salt/ ja loin uuden tiedoston komennolla `sudoedit top.sls`. Halusin ajaa top-file:ssa äsken luomani hello:n ja Apachen asennuksen, joten annoin seuraavanlaisen sisällön top-filelle:  
 
+```
+base:
+  '*':
+    - hello
+    - apache
+```
+
+Tämän jälkeen ajoin uuden top-file komennolla `sudo salt-call --local state.apply` ja kuten osasin odottaa sain virheilmoituksen.  
+
+![kuva19](./Pictures/kuva19.png)  
+
+Eli apacheen liittyvää sls-tiedostoa ei löydy, kuten osasin odottaa. Seuraavaksi loin apachea varten uuden moduulin hakemistoon /srv/salt/apache. Loin apache-kansiooni init.sls-tiedoston seuraavalla sisällöllä:  
+
+```
+install_apache:
+  pkg.installed:
+    - name: apache
+```
+
+Ajoin state.apply komennon uudestaan ja sain seuraavanalaisen virheilmoituksen:  
+
+![kuva20](./Pictures/kuva20.png)  
+
+Oletan, että apachen moduulista löytyvää init.sls-tiedostoa pitää muokata jotenkin. Ensimmäinen korjaus jota yritän on muuttaa -name: apache -> -name: apache2. Virheilmoitus sanoo selkeästi, että apache nimistä pakettia ei ole olemassa pakettivarastossani.  
+
+Ajoin state.apply:n uudestaan ja kuten arvasin, apachen asennus toimi tällä kertaa oikein hyvin.  
+
+![kuva21](./Pictures/kuva21.png)  
+
+![kuva22](./Pictures/kuva22.png)  
+
+Kysymys: ajaako salt myös sudo apt-get updaten automaattisesti ennenkuin asentaa Apache2:n?  
 
 
 
