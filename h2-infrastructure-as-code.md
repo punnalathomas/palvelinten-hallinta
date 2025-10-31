@@ -245,6 +245,7 @@ Saltproject. Salt overview YAML. Luettavissa: https://docs.saltproject.io/salt/u
 Saltproject. salt.states.cmd. Luettavissa: https://docs.saltproject.io/en/3007/ref/states/all/salt.states.cmd.html. Luettu: 31.10.2025  
 
 Saltproject. 2025. THE TOP FILE. Luettavissa: https://docs.saltproject.io/en/latest/ref/states/top.html. Luettu: 29.10.2025  
+
 Stackoverflow. 2024. Check Whether a User Exists. Luettavissa: https://stackoverflow.com/questions/14810684/check-whether-a-user-exists. Luettu: 31.10.2025  
 
 
