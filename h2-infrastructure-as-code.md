@@ -146,6 +146,40 @@ Ajoin state.apply:n uudestaan ja kuten arvasin, apachen asennus toimi tällä ke
 
 Kysymys: ajaako salt myös sudo apt-get updaten automaattisesti ennenkuin asentaa Apache2:n?  
 
+### Viisikko tiedostossa
+
+Loin aluksi kaikille tila-funktioille omat kansiot komennolla `sudo mkdir /srv/salt/hellopkg /srv/salt/hellofile /srv/salt/helloservice /srv/salt/hellouser /srv/salt/hellocmd`.  
+
+![kuva23](./Pictures/kuva23.png)  
+
+#### pkg
+
+![kuva24](./Pictures/kuva24.png)  
+
+#### file
+
+![kuva25](./Pictures/kuva25.png)  
+
+#### service
+
+![kuva26](./Pictures/kuva26.png)  
+
+#### user
+
+![kuva27](./Pictures/kuva27.png)  
+(stackoverflow 2024)  
+
+![kuva28](./Pictures/kuva28.png)  
+
+#### cmd
+
+![kuva29](./Pictures/kuva29.png)  
+(salt.states.md)  
+
+Tässä tehtävässä kannattaa huomioida, että init.sls tiedostolle on annettu creates-ominaisuus, eli komentoa ei ajeta, jos tiedosto löytyy jo.  
+
+### sls-tiedosto
+
 
 
 ## Lähteet
@@ -156,7 +190,12 @@ Karvinen, T. 2024. Hello Salt Infra-as-Code. Luettavissa: https://terokarvinen.c
 
 Saltproject. Salt overview YAML. Luettavissa: https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#rules-of-yaml. Luettu: 29.10.2025  
 
+Saltproject. salt.states.cmd. Luettavissa: https://docs.saltproject.io/en/3007/ref/states/all/salt.states.cmd.html. Luettu: 31.10.2025  
+
 Saltproject. 2025. THE TOP FILE. Luettavissa: https://docs.saltproject.io/en/latest/ref/states/top.html. Luettu: 29.10.2025  
+Stackoverflow. 2024. Check Whether a User Exists. Luettavissa: https://stackoverflow.com/questions/14810684/check-whether-a-user-exists. Luettu: 31.10.2025  
+
+
 
 
 
