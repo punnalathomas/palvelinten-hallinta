@@ -91,11 +91,21 @@ base:         # oletusympäristö
 
 ## Tehtävät
 
+### Hei maailma!
 
+Aloitin tehtävän tekemisen siirtymällä hakemistossa polkuun -> /srv/salt/. Loin kyseiseen hakemistoon uuden kansion komennolla `sudo mkdir hello`, tämän jälkeen siirryin hello-kansioon ja loin uuden init.sls-tiedoston komennolla `sudoedit init.sls`.  
 
+Annoin init.sls-tiedostolle seuraavanlaisen sisällön:  
+```
+/tmp/heimaailma:
+  file.managed
+```  
 
+![kuva17](./Pictures/kuva17.png)  
 
+Ajoin komennon `sudo salt-call --local state.apply hello` ja huomasin, että en antanut helloworld-tiedostolle .sls loppua, joten komento ei toiminut. Korjasin asian uudelleen nimeämällä tiedoston komennolla `sudo mv helloworld helloworld.sls`. Taas ongelma kun yritin ajaa sudo salt-call -komentoa. Unohdin, että tiedoston pitää olla init.sls, joten seuraavaksi korjasin sen. Tämän jälkeen komento toimi halutulla tavalla. Tarkistin vielä, että Salt teki mitä halusin ajamalla komennon `ls /tmp/` ja siellä on uusi tiedostoni!  
 
+![kuva18](./Pictures/kuva18.png)
 
 
 
