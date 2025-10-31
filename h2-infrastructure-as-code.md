@@ -15,7 +15,7 @@ update: 29.10.2025
 
 ## Tiivistelmä
 
-Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H2.  
+Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H2. Tehtävän tekeminen sujui hyvin ja aikaa kului yhteensä noin 4 tuntia. Haasteita ja ongelmia tuli matkalla, mutta selvisin hyvin niistä. Tämä tehtävä haastoi mukavasti itseäni ja oli hienoa päästä testaamaan lopussa hieman laajemman konfiguraation tekemistä.  
 
 ## Lue ja tiivistä artikkelit
 
@@ -180,13 +180,65 @@ Tässä tehtävässä kannattaa huomioida, että init.sls tiedostolle on annettu
 
 ### sls-tiedosto
 
+Lähdin tekemään apache_demo moduulia. Tarkoituksena on asentaa apachen web-serveri, muokata apachen-defaultsivua ja varmistetaan, että apache on käynnissä ja toimii.  
 
+#### lähtötilanne
+
+Lähtötilanteessa apache2 ei ole asennettu. Tämä on tarkistettu komennoilla `dpkg -l | grep apache2` ja `sudo systemctl status apache2`. Dpkg -komennolla voidaan tarkistaa asennetut paketit, -l listaa paketit ja grep:llä etsitään apache2 nimistä pakettia.  
+
+![kuva31](./Pictures/kuva31.png)  
+
+#### sls-tiedoston konfiguraatio
+(linode 2019)  
+
+![kuva30](./Pictures/kuva30.png)  
+
+Kävin luomassa apache_demo -moduulin ja annoin kuvan mukaisen sisällön tiedostolle.  
+
+1. pkg.installed asentaa apache2 webbi-serverin
+2. file.managed muokkaa /var/www/html/ -polusta löytyvää apachen defaul-sivua ja antaa lyhyen HTML5 sivun sisällön sille (Karvinen 2012)
+3. service.running varmistaa, että apache2 on päällä
+4. lisäsin myös create_index ja apache_service kohtiin required-rivit, eli Salt asentaa ne halutussa järjestyksessä
+
+#### lopputulos
+
+Lähdin kokeilemaan moduuliani komennolla `sudo salt-call --local state.apply apache_demo`. Täytyy myöntää, että ennen ensimmäistä ajoa jännitti hieman.  
+
+![kuva32](./Pictures/kuva32.png)  
+
+Ensimmäinen virhe viittaa HTML -koodiin, eli siinä näyttäisi olevan jotain vikaa. Pitkän sisennyksien tarkistelun jälkeen lähdin kokeilemaan Linoden ohjeesta löytyvää tapaa, eli tein apache_demo kansioon index.html tiedoston mihin laitoin HTML-koodin. Tämän jälkeen muokkasin init.sls tiedostoa viittaamaan tuohon index.html-tiedostoon. Tässä viimeisin versio init.sls:stä ennen kokeilua:  
+
+![kuva33](./Pictures/kuva33.png)  
+
+Nyt komento toimi halutulla tavalla. Eli apache asennettiin, sivua muokattiin ja varmistettiin, että demoni toimii.  
+
+![kuva34](./Pictures/kuva34.png)  
+
+![kuva35](./Pictures/kuva35.png)  
+
+![kuva36](./Pictures/kuva36.png)  
+
+Seuraavaksi testataan miltä etusivu näyttää nyt. 
+
+![kuva37](./Pictures/kuva37.png)  
+
+Hienosti näyttää toimivan!
+
+![kuva38](./Pictures/kuva38.png)  
+
+State.apply ajettiin uudestaan ja muutoksia ei tehty. Moduuli on siis idempotentti.  
+
+![kuva39](./Pictures/kuva39.png)  
 
 ## Lähteet
 
 Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/#h2-infraa-koodina. Luettu: 29.10.2025  
 
 Karvinen, T. 2024. Hello Salt Infra-as-Code. Luettavissa: https://terokarvinen.com/2024/hello-salt-infra-as-code/. Luettu: 29.10.2025  
+
+Karvinen, T. 2012. Short HTML5 page. Luettavissa: https://terokarvinen.com/2012/short-html5-page/. Luettu: 31.10.2025  
+
+Linode. 2019. Configure Apache with Salt Stack. Luettavissa: https://www.linode.com/docs/guides/configure-apache-with-salt-stack/. Luettu: 31.10.2025  
 
 Saltproject. Salt overview YAML. Luettavissa: https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#rules-of-yaml. Luettu: 29.10.2025  
 
