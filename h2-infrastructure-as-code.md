@@ -1,4 +1,4 @@
-update: 29.10.2025  
+update: 31.10.2025  
 
 # Lokaali tietokone ja käyttöjärjestelmä
 **GPU:** Nvidia RTX 2070  
