@@ -15,7 +15,7 @@ update: 7.11.2025
 
 ## Tiivistelmä
 
-Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H3.   
+Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H3. Tehtävän tekeminen oli yllättävän työläs, mutta onneksi löytyi hyviä lähteitä sen tekemiseen. Halusin luoda uudet virtuaalikoneet suoraan käyttövalmiina ja onnistuin siinä hyvin. Vagrantin käyttö ei ollut itselleni ennestään tuttua, mutta asennus ja käyttö onnistui pienen yrityksen ja erehdyksen jälkeen. Aikaa kului yhteensä noin 5 tuntia.  
 
 ## Lue ja tiivistä artikkelit
 
@@ -287,6 +287,8 @@ Lopuksi ajoin host koneessani komennon `vagrant destroy`, jolloin luodut virtuaa
 Gianlex. 2025. H2 - Soitto kotiin. Luettavissa: https://github.com/gianglex/Courses/blob/main/Palvelinten-Hallinta/h2-soitto-kotiin.md. Luettu: 7.11.2025  
 
 Hashicorp. 2025. Install Vagrant. Luettavissa: https://developer.hashicorp.com/vagrant/downloads. Luettu: 7.11.2025  
+
+Josh. 2014. How to Easily Increase Memory on your Vagrant Virtual Machine. Luettavissa: https://www.josheaton.org/increase-memory-vagrant-virtual-machine/. Luettu: 7.11.2025  
 
 Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/#h3-soitto-kotiin. Luettu: 7.11.2025  
 
