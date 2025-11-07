@@ -279,7 +279,7 @@ Master kuuntelee portteja 22/tcp, 4505/tcp ja 4505/tcp.
 
 Minion kuuntelee porttia 22/tcp.  
 
-
+Lopuksi ajoin host koneessani komennon `vagrant destroy`, jolloin luodut virtuaalikoneet tuhoutuivat.  
 
 
 ## Lähteet
