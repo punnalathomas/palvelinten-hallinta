@@ -188,6 +188,96 @@ Kokeilin minionin komentamista Karvisen (2018) ohjeesta löytyvällä komennolla
 
 Kaikki näyttää toimivan vielä odotetulla tavalla. Seuraavaksi laittaisin Vagrantfileen vielä skriptin, joka hyväksyisi avaimet suoraan.  
 
+### Tilojen ajaminen verkon yli
+
+Halusin asentaa molemmille koneille palomuurin Saltilla. Aloitin asentamalla myös Masterille Salt-minion -paketin. Tämän jälkeen Masterilla käydään muokkaamassa /etc/salt/minion -polkuun masterin IP-osoite ja potkaistaan demonia. Kokeilin ajaa komentoa `sudo salt '*' state.single pkg.installed ufw`.   
+
+Tilojen ajaminen kaatoi Salt-masterin ja vika tuntui olevan muistin määrässä.  
+
+![kuva50](./Pictures/kuva50.png)  
+
+Lisäsin siis virtuaalikoneiden muistia muokkaamalla Vagrant-tiedostoa. Tässä uusi versio:  
+
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$master = <<MASTER
+sudo apt-get update
+sudo apt-get -y install curl # -y vastaa oletuskysymyksiin YES
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+
+sudo apt-get update
+sudo apt-get -y install salt-master
+
+echo "Master installed"
+MASTER
+
+
+
+$minion = <<MINION
+sudo apt-get update
+sudo apt-get -y install curl
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+
+sudo apt-get update
+sudo apt-get -y install salt-minion
+
+
+echo "master: 192.168.88.100" | sudo tee /etc/salt/minion # laitetaan masterin IP-osoite minionille
+
+sudo systemctl stop salt-minion
+sudo systemctl start salt-minion # käytin tässä kohtaa starttia ja stoppia, koska tunnilla ilmeni ongelmia restartin kanssa
+
+echo "Minion installed"
+MINION
+
+Vagrant.configure("2") do |config|
+	config.vm.synced_folder ".", "/vagrant", disabled: true
+	config.vm.synced_folder "shared/", "/home/vagrant/shared", create: true
+	config.vm.box = "debian/bookworm64"
+
+	config.vm.define "master" do |master|
+		master.vm.hostname = "master"
+		master.vm.network "private_network", ip: "192.168.88.100"
+		master.vm.provider "virtualbox" do |vb|
+     		vb.customize ["modifyvm", :id, "--memory", "2048"]
+    	end
+		master.vm.provision "shell", inline: $master
+	end
+
+	config.vm.define "minion", primary: true do |minion|
+		minion.vm.hostname = "minion"
+		minion.vm.network "private_network", ip: "192.168.88.101"
+		minion.vm.provider "virtualbox" do |vb|
+      		vb.customize ["modifyvm", :id, "--memory", "1024"]
+    	end
+
+		minion.vm.provision "shell", inline: $minion
+	end
+	
+end
+```
+
+Masterin base memory nostettu -> 2048 MB ja Minionin -> 1024 MB. Tiedoston muutosten jälkeen ajoin komennon `vagrant reload --provision`, eli sammuttaa koneet -> lukee vagrant-tiedostoa uudelleen -> käynnistää koneen uusilla asetuksilla.  
+
+Muutos toimi ja komennon `sudo salt '*' state.single pkg.installed ufw` ajaminen toimi.  
+
+![kuva51](./Pictures/kuva51.png)  
+
+Toinen komento mitä kokeilin oli `sudo salt '*' cmd.run 'sudo ss -tuln', eli tarkistetaan mitkä portit ovat auki palomuurissa. Komento antoi seuraavanlaisen tulosteen:  
+
+![kuva52](./Pictures/kuva52.png)  
+
+Master kuuntelee portteja 22/tcp, 4505/tcp ja 4505/tcp.  
+
+Minion kuuntelee porttia 22/tcp.  
 
 
 
