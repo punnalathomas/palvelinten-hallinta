@@ -85,14 +85,116 @@ Tämän jälkeen virtuaalikoneesta exit ja komento `vagrant destroy`.
 
 ![kuva45](./Pictures/kuva45.png)  
 
+Koneen tuhoamisen jälkeen tarkistin vielä Virtuaboxista, että kone oli kadonnut.  
+
 ## Kaksi konetta
 
+Tässä tehtävässä aion luoda kaksi uutta virtuaalikonetta, joista toinen toimii masterina ja toinen minionina.  
+
+Aloitin antamalla komennon `vagrant init debian/bookworm64` host-koneellani. Initin jälkeen avasin vagrantfile:n notepadissa komennolla `notepad.exe Vagrantfile` (Reddit 2023). Tämän jälkeen siirryin muokkaamaan tiedostoa.  
+
+Vagrant -tiedosto:  
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$master = <<MASTER
+sudo apt-get update
+sudo apt-get -y install curl # -y vastaa oletuskysymyksiin YES
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+
+sudo apt-get update
+sudo apt-get -y install salt-master
+
+echo "Master installed"
+MASTER
+
+
+
+$minion = <<MINION
+sudo apt-get update
+sudo apt-get -y install curl
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+
+sudo apt-get update
+sudo apt-get -y install salt-minion
+
+
+echo "master: 192.168.88.100" | sudo tee /etc/salt/minion # laitetaan masterin IP-osoite minionille
+
+sudo systemctl stop salt-minion
+sudo systemctl start salt-minion # käytin tässä kohtaa starttia ja stoppia, koska tunnilla ilmeni ongelmia restartin kanssa
+
+echo "Minion installed"
+MINION
+
+Vagrant.configure("2") do |config|
+	config.vm.synced_folder ".", "/vagrant", disabled: true
+	config.vm.synced_folder "shared/", "/home/vagrant/shared", create: true
+	config.vm.box = "debian/bookworm64"
+
+	config.vm.define "master" do |master|
+		master.vm.hostname = "master"
+		master.vm.network "private_network", ip: "192.168.88.100"
+		master.vm.provision "shell", inline: $master
+	end
+
+	config.vm.define "minion", primary: true do |minion|
+		minion.vm.hostname = "minion"
+		minion.vm.network "private_network", ip: "192.168.88.101"
+		minion.vm.provision "shell", inline: $minion
+	end
+	
+end
+```  
+
+Käytin tämän tiedoston tekemisessä apuna Gianlexin (2025) tekemää harjoitusta, sekä Karvisen (2021) kahden virtuaalikoneen asennus ohjetta. Pyysin myös ChatGPT:tä tarkistamaan skriptin mahdolliset kirjoitusvirheet.  
+
+Eli luomani skripti luo kaksi Debian 12 (Bookworm64) virtuaalikonetta Master ja Minion.  
+
+Määritin aluksi kaksi skriptiä, jotka päivittävät pakettiluettelot ja asentavat Curl -työkalun.  
+
+Molemmille asennetaan Saltin paketit aikaisemmista tehtävistä tutulla tavalla.  
+
+Salt käynnistetään uudelleen stop/start menetelmällä, koska restart aiheutti ongelmia tunnilla.  
+
+Master saa IP-osoitteen 192.168.88.100 ja Minion IP-osoitteen 192.168.88.101. Skripti myös kirjoittaa Minionille Masterin IP-osoitteen salt-minionin konfiguraatio tiedostoon.  
+
+Lähdetään kokeilemaan asennusta komennolla `vagrant up`. Ongelmia asennuksen aikana ei ilmennyt ja Virtualboxiin on ilmestynyt kaksi uutta konetta.  
+
+![kuva46](./Pictures/kuva46.png)  
+
+Otetaan ensin yhteys masteriin komennolla `vagrant ssh master`. Kokeilin pingata minionia ja se onnistui.  
+
+![kuva48](./Pictures/kuva48.png)  
+
+Kokeilin myös, että minion voi pingata masteria ja näytti toimivan.  
+
+![kuva47](./Pictures/kuva47.png)  
+
+### Herra-orja verkossa
+
+Salt-master ja Salt-minion asennettiin koneille virtuaalikoneiden asennuksen yhteydessä. Seuraavaksi täytyy hyväksyä Minionin avain Masterilla. Käytetään komentoa `sudo salt-key`. Jostain syystä hyväksyttäviä avaimia ei näy. Kävin tarkistamassa että Minion-koneen /etc/salt/minion -tiedostosta löytyi masterin IP-osoite ja Tarkistin myös masterilta, että Salt-master on päällä. Pienen vianselvityksen jälkeen huomasin, että minion näkyykin **unaccepted keys** -kohdassa. Eli seuraavaksi komento `sudo salt-key -A`.  
+
+Kokeilin minionin komentamista Karvisen (2018) ohjeesta löytyvällä komennolla `master$ sudo salt '*' cmd.run 'whoami'` ja sain seuraavanlaisen vastauksen:  
+
+![kuva49](./Pictures/kuva49.png)  
+
+Kaikki näyttää toimivan vielä odotetulla tavalla. Seuraavaksi laittaisin Vagrantfileen vielä skriptin, joka hyväksyisi avaimet suoraan.  
 
 
 
 
 
 ## Lähteet
+
+Gianlex. 2025. H2 - Soitto kotiin. Luettavissa: https://github.com/gianglex/Courses/blob/main/Palvelinten-Hallinta/h2-soitto-kotiin.md. Luettu: 7.11.2025  
 
 Hashicorp. 2025. Install Vagrant. Luettavissa: https://developer.hashicorp.com/vagrant/downloads. Luettu: 7.11.2025  
 
@@ -103,6 +205,8 @@ Karvinen, T. 2023. Salt Vagrant - automatically provision one master and two sla
 Karvinen, T. 2021. Two Machine Virtual Network With Debian 11 Bullseye and Vagrant. Luettavissa: https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/. Luettu: 7.11.2025  
 
 Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux. Luettavissa: https://terokarvinen.com/2018/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/?fromSearch=salt%20quickstart%20salt%20stack%20master%20and%20slave%20on%20ubuntu%20linux. Luettu: 7.11.2025  
+
+Reddit. 2023. Open .txt file via cmd. Luettavissa: https://www.reddit.com/r/commandline/comments/1ago7sm/open_txt_file_via_cmd/. Luettu: 7.11.2025  
 
 
 
