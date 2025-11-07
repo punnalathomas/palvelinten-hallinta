@@ -37,12 +37,20 @@ Master-palvelimen palomuuriin tulisi puhkaista reikä porteille 4505/tcp ja 4506
 
 ### Salt Vagrant
 
+Infra as Code, eli meidän tapauksessa: kirjoitetaan tekstitiedostoon koodi, mikä kertoo, minkälaisia virtuaalikoneita haluamme pystyttää ja millä asetuksilla. Top-fileen voidaan määrittää mitkä tilat ajetaan komennolla `sudo salt '*' state.apply`, eli ei tarvitse kirjoittaa jokaista moduulia erikseen, mitkä sijaitsevat top.sls -tiedostossa. (Karvinen 2023)  
 
+## Tehtävät
 
+### Hello Vagrant!
 
+Aloitin tehtävän etsimällä tietoa kuinka saan asennettua Vagrantin Windowsille. Löysin Vagrantin viralliselta sivulta ladattavan tiedoston, eli valitaan täältä: https://developer.hashicorp.com/vagrant/downloads -> Windows Binary download -> AMD64. 
+
+Tiedoston lataamisen jälkeen avasin installerin. Asennus oli erittäin yksinkertainen ja se ei tarjonnut mitään valintoja asennukseen. Asennuksen jälkeen oli aika käynnistää järjestelmä uudelleen.
 
 
 ## Lähteet
+
+Hashicorp. 2025. Install Vagrant. Luettavissa: https://developer.hashicorp.com/vagrant/downloads. Luettu: 7.11.2025  
 
 Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/#h3-soitto-kotiin. Luettu: 7.11.2025  
 
