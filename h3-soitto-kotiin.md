@@ -45,7 +45,51 @@ Infra as Code, eli meidän tapauksessa: kirjoitetaan tekstitiedostoon koodi, mik
 
 Aloitin tehtävän etsimällä tietoa kuinka saan asennettua Vagrantin Windowsille. Löysin Vagrantin viralliselta sivulta ladattavan tiedoston, eli valitaan täältä: https://developer.hashicorp.com/vagrant/downloads -> Windows Binary download -> AMD64. 
 
-Tiedoston lataamisen jälkeen avasin installerin. Asennus oli erittäin yksinkertainen ja se ei tarjonnut mitään valintoja asennukseen. Asennuksen jälkeen oli aika käynnistää järjestelmä uudelleen.
+Tiedoston lataamisen jälkeen avasin installerin. Asennus oli erittäin yksinkertainen ja se ei tarjonnut mitään valintoja asennukseen. Asennuksen jälkeen oli aika käynnistää järjestelmä uudelleen.  
+
+Uudelleen käynnistyksen jälkeen avasin host-koneellani (Windows) command promptin ja annoin komennon `vagrant --version`. Komento toimi, eli vagrant on asennettu.  
+
+![kuva40](./Pictures/kuva40.png)  
+
+Olin asentanut Oraclen Virtual Boxin aikaisemmin, joten en käy sen asennusta tässä läpi.  
+
+### Linux Vagrant
+
+Seuraavaksi on aika asentaa uusi virtuaalikone Vagrantilla. Aloitin Karvisen (2025) ohjeista löytyvällä komennolla vagrant init debian/trixie13`. Vaihdoin komennosta osan bookworm64 -> trixie13. 
+
+![kuva41](./Pictures/kuva41.png)  
+
+Tämän jälkeen ajoin komennon `vagrant up` ja sain seuraavanlaisen virheilmoituksen:  
+
+![kuva42](./Pictures/kuva42.png)  
+
+Tämä viittaisi siihen että Trixie13 ei löydy Vagrantilla. Kokeillaan seuraavaksi Karvisen ohjeiden mukaan bookworm64.  
+
+Päätin aluksi luoda virtuaalikoneelleni uuden kansion polkuun `C:\users\thomas\debian` siirryin hakemistoon komennolla `cd debian`. Nyt kokeilen virtuaalikoneen asennusta uudeelleen.  
+
+`vagrant init debian/bookworm64`  
+
+`vagrant up`
+
+Asennus onnistui ja huomasin, että Virtualboxiin ilmestyi uusi kone, joka on käynnissä.  
+
+![kuva43](./Pictures/kuva43.png)  
+
+Seuraavaksi otetaan SSH-yhteys koneeseen host koneeni command promptista komennolla `vagrant ssh`. 
+
+Ja sisällä ollaan! Testasin, että netti toimii komennolla `ping 8.8.8.8` ja tarkistin koneen IP-osoitteen komennolla `hostname -I`. Kaikki näyttää toimivan hyvin.  
+
+![kuva44](./Pictures/kuva44.png)  
+
+Tämän jälkeen virtuaalikoneesta exit ja komento `vagrant destroy`.  
+
+![kuva45](./Pictures/kuva45.png)  
+
+## Kaksi konetta
+
+
+
+
 
 
 ## Lähteet
