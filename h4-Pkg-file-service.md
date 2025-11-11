@@ -32,7 +32,7 @@ Päätin tehdä tehtävät ilman Vagranttia tällä kertaa, eli kirjaudun aiemmi
 
 ## SSHouto
 
-### Käsin tehty
+### Käsintehty
 
 Tarkistin aluksi onko SSH asennettu virtuaalikoneelle ja tyhjää näytti. Tämän jälkeen `sudo apt-get update` -> `sudo apt-get install ssh` -> sudo systemctl status ssh`.   
 
@@ -88,7 +88,52 @@ Kävin kommentoimassa port 8888 muutoksen pois tiedostosta. Tämän jälkeen aje
 
 ![kuva64](./Pictures/kuva64.png)  
 
-Komento avasi taas portin 8888 ja potkaisi demonia onnistuneesti.
+Komento avasi taas portin 8888 ja potkaisi demonia onnistuneesti.  
+
+## Apache
+
+Lähtötilanne:  
+
+![kuva65](./Pictures/kuva65.png)  
+
+### Käsintehty
+
+1. `sudo apt-get update`
+2. `sudo apt-get install apache2`
+3. `mkdir -p /home/thomas/public-sites/punnala.example.com`
+4. `micro hosts` ->
+![kuva66](./Pictures/kuva66.png)
+5. `cd /home/thomas/public-sites/punnala.example.com`
+6. `micro index.html` ->
+```
+<!doctype html>
+<html>
+<head>
+	<title>Punnala Test Page</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+	<h1>Punnala Test Page</h1>
+	<p>Let's test UTF-8 with "päivää"</p>
+</body>
+</html>
+```
+7. `cd /etc/apache2/sites-available/`
+8. `micro punnala.example.com.conf` ->
+![kuva67](./Pictures/kuva67.png)
+9. `sudo a2ensite punnala.example.com.conf`
+10. `sudo systemctl reload apache2`
+11. `curl localhost` ->
+![kuva68](./Pictures/kuva68.png)
+
+Siinä on asennettuna apache2 web-server ja name based virtual host konfiguroituna (punnala.example.com). Weppisivua pystyy muokkaamaan ilman sudoa ja se sijaitsee käyttäjän Thomas kotihakemistossa. `curl localhost`:illa tarkistettu, että sivu näkyy palvelimen etusivulla.  
+
+Ennen kaiken poistamista tehdään /srv/salt/ -polkuun uusi kansio ja laitetaan konfiguraatiotiedostot talteen automatisointia varten.  
+
+
+
+
+
 
 # Lähteet
 
