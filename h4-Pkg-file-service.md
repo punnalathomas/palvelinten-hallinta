@@ -270,36 +270,6 @@ apache2-service:
 
 ```
 
-## Postgresql
-
-### Käsintehty
-
-Aloitin PostgreSQL:n asennuksen komennoilla `sudo apt-get update` ja `sudo apt-get install postgresql postgresql-client` (Debian Wiki).
-
-1. `sudo su - postgres`  #kirjaudutaan sisään postgressiin
-2. `createuser --pwprompt mypguser` #luodaan postgreSql:n käyttäjä
-3. annetaan salasana
-4. `createdb -O mypguser mypgdatabase` #luodaan tietokanta
-5. exit
-6. `psql -h localhost -d mypgdatabase -U mypguser` #kirjaudutaan sisään tietokantaan
-7. ja sisällä ollaan
-8. `\q` #kirjautuu ulos tietokannasta  
-
-![kuva77](./Pictures/kuva77.png)  
-
-![kuva78](./Pictures/kuva78.png)  
-
-Tietokannan testailua.  
-
-### Automatisoitu
-
-
-
-
-
-
-
-
 
 
 
