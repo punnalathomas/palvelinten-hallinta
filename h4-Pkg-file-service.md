@@ -58,8 +58,37 @@ Tämän jälkeen poistetaan äsken asennettu ssh palvelin komennolla `sudo apt r
 
 ### Automatisointi
 
+Aloitetaan luomalla Salt-conf tiedosto aiemmin luotuun polkuun eli `sudoedit /srv/salt/ssh/init.sls` ja annetaan seuraava sisältö tiedostolle:  
 
+![kuva58](./Pictures/kuva58.png)  
 
+Aika testata eli ajetaan `sudo salt '*' state.apply ssh` ja komento toimi mainiosti heti ekalla yrityksellä!  
+
+![kuva59](./Pictures/kuva59.png)   
+
+Eli ssh-paketti asennettiin, /etc/ssh/sshd_config tiedostoa muutettiin ja demoni käynnistettiin uudelleen. Seuraavaksi testaillaan hieman toimivuutta.
+
+### Testit
+
+![kuva60](./Pictures/kuva60.png)
+
+Toinen ajo ei tehnyt mitään muutoksia, eli se on idempotentti. Seuraavaksi kokeilin kirjautua käyttäjälleni ssh -yhteydellä, komennolla `ssh -p 8888 thomas@localhost` ja sain virheilmoituksen. 
+
+![kuva61](./Pictures/kuva61.png)  
+
+Eli SSH-palvelimen avain on vaihtunut, koska poistin ssh-paketin ja asensin sen uudelleen. Korjataan antamalla komento `ssh-keygen -f "/home/thomas/.ssh/known_hosts" -R '[localhost]:8888'`. Tämän jälkeen sisäänkirjautuminen onnistui.  
+
+![kuva62](./Pictures/kuva62.png)  
+
+Tämän voisi todennäköisesti automatisoida Saltilla, mutta en ajan säästämiseksi lähde paneutumaan siihen enemää. Seuraavaksi muutan /etc/ssh/sshd_config -tiedostoa käsin ja katson mitä Salt tekee.  
+
+![kuva63](./Pictures/kuva63.png)  
+
+Kävin kommentoimassa port 8888 muutoksen pois tiedostosta. Tämän jälkeen ajetaan uudestaan `sudo salt '*' state.apply ssh`.  
+
+![kuva64](./Pictures/kuva64.png)  
+
+Komento avasi taas portin 8888 ja potkaisi demonia onnistuneesti.
 
 # Lähteet
 
