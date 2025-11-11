@@ -130,6 +130,100 @@ Siinä on asennettuna apache2 web-server ja name based virtual host konfiguroitu
 
 Ennen kaiken poistamista tehdään /srv/salt/ -polkuun uusi kansio ja laitetaan konfiguraatiotiedostot talteen automatisointia varten.  
 
+`cd srv/salt/` -> `sudo mkdir apache_demo2` -> `sudo cp /etc/apache2/sites-available/punnala.example.com.conf .` -> `sudo cp /home/thomas/public-sites/punnala.example.com/index.html .`  
+
+![kuva69](./Pictures/kuva69.png)  
+
+![kuva70](./Pictures/kuva70.png)  
+
+Apache2 ja äsken konfatut tiedostot poistettu.  
+
+### Automatisointi
+
+`sudoedit /srv/salt/apache_demo2/init.sls`:  
+
+```
+apache2:
+  pkg.installed
+
+/home/thomas/public-sites/punnala.example.com:
+  file.directory:
+    - user: thomas
+    - group: thomas
+    - mode: '0755'
+
+/home/thomas/public-sites/punnala.example.com/index.html:
+  file.managed:
+    - source: salt://apache_demo2/index.html
+    - user: thomas
+    - group: thomas
+    - mode: '0644' 
+
+/etc/apache2/sites-available/punnala.example.com.conf:
+  file.managed:
+    - source: salt://apache_demo2/punnala.example.com.conf
+
+/etc/apache2/sites-enabled/punnala.example.com.conf:
+  file.symlink:
+    - target: /etc/apache2/sites-available/punnala.example.com.conf
+    - require:
+      - file: /etc/apache2/sites-available/punnala.example.com.conf
+
+disable-default-site:
+  cmd.run:
+    - name: a2dissite -q 000-default.conf || true
+
+add_site_to_hosts:
+  host.present:
+    - ip: 127.0.0.1
+    - names:
+      - punnala.example.com
+
+apache2-service:
+  service.running:
+    - name: apache2
+    - enable: True
+    - reload: True
+    - watch:
+      - file: /etc/apache2/sites-available/punnala.example.com.conf
+      - file: /etc/apache2/sites-enabled/punnala.example.com.conf
+      - file: /home/thomas/public-sites/punnala.example.com/index.html
+```
+
+Ja sitten kokeillaan! `sudo salt '*' state.apply apache_demo2`.  
+
+### Testaus
+
+![kuva71](./Pictures/kuva71.png)  
+
+Lupaavasti alkoi, eli ei erroreita ja weppiserverin etusivu on halutun näköinen. Kokeilin aluksi muokata etusivun index.html -tiedostoa ja huomasin, että sivun muokkaaminen vaati sudoa, joten muokkasin init.sls -tiedostoon omistajaksi käyttäjän thomas.  
+
+![kuva72](./Pictures/kuva72.png)  
+
+Uusi ongelma ilmeni, eli apache ei pysty lukemaan tiedostoa tai hakemistoa.  
+
+![kuva73](./Pictures/kuva73.png)  
+
+Ongelma oli /home/thomas/ -kansion oikeuksissa. Kävin muokkaamassa tämän salt-tiedostoon ja uuden ajon jälkeen localhost näyttää vihdoinkin oikean sivun!  
+
+![kuva74](./Pictures/kuva74.png)  
+
+Kävin vielä kokeilemassa ottaa punnala.example.com pois sites-enabled:ista ja ajamalla uudestaa state.apply apache_demo2, sain sen takaisin sites-enabled. 
+
+![kuva75](./Pictures/kuva75.png)  
+
+![kuva76](./Pictures/kuva76.png)  
+
+
+
+
+ 
+
+
+
+
+
+
 
 
 
