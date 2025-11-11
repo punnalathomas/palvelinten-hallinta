@@ -214,10 +214,63 @@ Kävin vielä kokeilemassa ottaa punnala.example.com pois sites-enabled:ista ja 
 
 ![kuva76](./Pictures/kuva76.png)  
 
+Viimeisin versio apache_demo2:  
+```
+apache2:
+  pkg.installed
+
+/home/thomas:
+  file.directory:
+    - user: thomas
+    - group: thomas
+    - mode: '0751'
+
+/home/thomas/public-sites/punnala.example.com:
+  file.directory:
+    - user: thomas
+    - group: thomas
+    - mode: '0755'
+
+/home/thomas/public-sites/punnala.example.com/index.html:
+  file.managed:
+    - source: salt://apache_demo2/index.html
+    - user: thomas
+    - group: thomas
+    - mode: '0644'
+
+/etc/apache2/sites-available/punnala.example.com.conf:
+  file.managed:
+    - source: salt://apache_demo2/punnala.example.com.conf
+
+/etc/apache2/sites-enabled/punnala.example.com.conf:
+  file.symlink:
+    - target: /etc/apache2/sites-available/punnala.example.com.conf
+    - require:
+      - file: /etc/apache2/sites-available/punnala.example.com.conf
+
+disable-default-site:
+  cmd.run:
+    - name: a2dissite -q 000-default.conf || true
+
+add_site_to_hosts:
+  host.present:
+    - ip: 127.0.0.1
+    - names:
+      - punnala.example.com
+
+apache2-service:
+  service.running:
+    - name: apache2
+    - enable: True
+    - reload: True
+    - watch:
+      - file: /etc/apache2/sites-available/punnala.example.com.conf
+      - file: /etc/apache2/sites-enabled/punnala.example.com.conf
+      - file: /home/thomas/public-sites/punnala.example.com/index.html
+
+```
 
 
-
- 
 
 
 
