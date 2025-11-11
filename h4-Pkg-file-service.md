@@ -28,7 +28,7 @@ Perinteinen lähestymistapa demonien hallintaan Saltilla:
 
 # Tehtävät
 
-Päätin tehdä tehtävät ilman Vagranttia tällä kertaa, eli kirjaudun aiemmin luodulle virtuaalikoneelle ja kokeilen kaikki asetukset lokaalisti.  
+Päätin tehdä tehtävät ilman Vagranttia tällä kertaa, eli kirjaudun aiemmin luodulle virtuaalikoneelle ja kokeilen kaikki asetukset sillä.    
 
 ## SSHouto
 
@@ -270,6 +270,28 @@ apache2-service:
 
 ```
 
+## Postgresql
+
+### Käsintehty
+
+Aloitin PostgreSQL:n asennuksen komennoilla `sudo apt-get update` ja `sudo apt-get install postgresql postgresql-client` (Debian Wiki).
+
+1. `sudo su - postgres`  #kirjaudutaan sisään postgressiin
+2. `createuser --pwprompt mypguser` #luodaan postgreSql:n käyttäjä
+3. annetaan salasana
+4. `createdb -O mypguser mypgdatabase` #luodaan tietokanta
+5. exit
+6. `psql -h localhost -d mypgdatabase -U mypguser` #kirjaudutaan sisään tietokantaan
+7. ja sisällä ollaan
+8. `\q` #kirjautuu ulos tietokannasta  
+
+![kuva77](./Pictures/kuva77.png)  
+
+![kuva78](./Pictures/kuva78.png)  
+
+Tietokannan testailua.  
+
+### Automatisoitu
 
 
 
@@ -289,4 +311,6 @@ Heinonen, J. 2025. Apache2. Luettavissa: https://github.com/johannaheinonen/joha
 Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/#h4-pkg-file-service. Luettu: 11.11.2025  
 
 Karvinen, T. 2018. Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port. Luettavissa: https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh. Luettu: 11.11.2025  
+
+Wiki.Debian. PosgreSql. Luettavissa: https://wiki.debian.org/PostgreSql. Luettu: 11.11.2025  
 
