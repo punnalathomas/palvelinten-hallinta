@@ -270,11 +270,115 @@ apache2-service:
 
 ```
 
+## Postgresql
 
+### Käsintehty
 
+Aloitin PostgreSQL:n asennuksen komennoilla `sudo apt-get update` ja `sudo apt-get install postgresql postgresql-client` (Debian Wiki).
+
+1. `sudo su - postgres`  #kirjaudutaan sisään postgressiin
+2. `createuser --pwprompt mypguser` #luodaan postgreSql:n käyttäjä
+3. annetaan salasana
+4. `createdb -O mypguser mypgdatabase` #luodaan tietokanta
+5. exit
+6. `psql -h localhost -d mypgdatabase -U mypguser` #kirjaudutaan sisään tietokantaan
+7. ja sisällä ollaan
+8. `\q` #kirjautuu ulos tietokannasta  
+
+![kuva77](./Pictures/kuva77.png)  
+
+![kuva78](./Pictures/kuva78.png)  
+
+Tietokannan testailua.  
+
+### Automatisoitu
+
+Aloitin automatisoinnin luomalla uuden kansion polkuun /srv/salt/ komennolla `sudo mkdir postgresql`. Siirryin kyseiseen kansioon käyttämällä cd komentoa. Loin sinne init.sls -tiedoston, mihin alan rakentamaan konfiguraatiota.  
+
+Tämä asennustiedosto mukailee GoDjangon (2019) videolla näkyvää tiedostoa:  
+
+```
+postgresql:
+  pkg.installed:
+    - pkgs:
+      - postgresql
+      - postgresql-client
+
+postgresql-service:
+  service.running:
+    - name: postgresql
+    - enable: True
+
+user:
+  postgres_user.present:
+    - name: myuser
+    - password: password 
+    - encrypted: True
+    - superuser: False
+    - runas: postgres
+
+database:
+  postgres_database.present:
+    - owner: myuser
+    - name: mydb
+    - password: password
+    - runas: postgres
+```
+
+Eli asennetaan postgresql ja postgresql-client -> varmistetaan, että se on päällä -> luodaan käyttäjä ja tietokanta. Seuraavaksi siirryin luomaan pilareita tätä tehtävää varten. Koska emme halua kovakoodata käyttäjä- ja tietokantatietoja salt-tiedostoon, voimme sijoittaa ne pilareihin, joista salt lukee kyseiset tiedot.  
+
+Pilareiden avulla voidaan kohdistaa dataa vain tietylle minionille, esimerkiksi jos meidän tarvitsee luoda useita eri käyttäjiä, niin voimme tehdä jokaiselle minionille oman pilarin, jota yksi state-file käyttää.   
+
+Aloitetaan luomalla kansio polkuun /srv/ -> mkdir /srv/pillar/. Tämä on default-polku, mistä salt lukee pilareita. Luodaan tuohon kansioon tiedosto nimeltä postgres.sls. Tuohon tiedostoon annettiin seuraavanlainen sisältö:  
+
+```
+postgresql:
+  user: myuser
+  password: password
+  db_name: mydb
+```
+Tämän jälkeen siirryin takaisin /srv/salt/postgresql/init.sls -tiedostoon. Nyt lähdetään muokkaamaan sitä niin, että se lukee tiedot äsken luodusta pilarista.
+
+```
+{% set config = pillar.get('postgresql', {}) %}
+
+postgresql:
+  pkg.installed:
+    - pkgs:
+      - postgresql
+      - postgresql-client
+
+postgresql-service:
+  service.running:
+    - name: postgresql
+    - enable: True
+
+user:
+  postgres_user.present:
+    - name: {{ config['user'] }}
+    - password: {{ config['password'] }}
+    - encrypted: False
+    - superuser: False
+    - runas: postgres
+
+database:
+  postgres_database.present:
+    - owner: {{ config['user'] }}
+    - name: {{ config['db_name'] }}
+    - runas: postgres
+```
+Tässä uusi init.sls -tiedosto salt-kansiossa. Nyt voidaan huomata, että nimien ja salasanojen tilalle on ilmestinyt Jinja-asetukset. Config sisältää pilarin datan, joka haetaan haluttuihin kohtiin.  
+
+Seuraavaksi on aika kokeilla kuinka tämä toimii.  
+
+Lähtötilanne:  
+
+![kuva79](./Pictures/kuva79.png)  
 
 
 # Lähteet
+
+GoDjango. 2019. SaltStack and Pillar Basics. Katsottavissa: https://www.youtube.com/watch?v=lizzgnVOsR4&t=20s. Katsottu: 12.11.2025  
 
 Heinonen, J. 2025. Apache2. Luettavissa: https://github.com/johannaheinonen/johanna-test-repo/blob/main/linux-03092025.md. Luettu: 11.11.2025  
 
