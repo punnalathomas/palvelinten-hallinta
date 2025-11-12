@@ -418,7 +418,7 @@ Kokeillaan kirjautua seuraavaksi sisään tietokantaan. Annetaan komento `psql -
 
 ![kuva86](./Pictures/kuva86.png)  
 
-
+Ongelma tuntuu olevan password algorithmissa. Minun täytyisi saada salasana 
 
 # Lähteet
 
