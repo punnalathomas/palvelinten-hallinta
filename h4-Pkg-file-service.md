@@ -375,7 +375,49 @@ Lähtötilanne:
 
 ![kuva79](./Pictures/kuva79.png)  
 
-Ajetaan komento `sudo salt '*' state.apply postgresql`
+Lähdin aluksi testaamaan lukeeko Salt pilarit oikein, eli komento `sudo salt-call --local pillar.items` ja tulos näytti tyhjää. Huomasin, että top.sls -tiedosto puuttui pillar -kansiosta, eli luodaan se sinne ja annetaan sisällöksi:  
+```
+base:
+  '*':
+    - postgresql
+```
+
+Tallennetaan ja kokeillaan uudestaan. Taas error, virhe näyttää olevan pilareiden tiedostonimissä, eli muutetaan pilareista löytyvä postgres.sls -> postgresql.sls.  
+
+![kuva80](./Pictures/kuva80.png)  
+
+Ja tiedostonimen muutoksen jälkeen toimii!  
+
+![kuva81](./Pictures/kuva81.png)  
+
+Eli Salt pystyy lukemaan pilarit oikein.  
+
+Ajetaan komento `sudo salt-call --local state.apply postgresql`
+
+Postgresql:n asennus onnistui, mutta käyttäjää ja tietokantaa ei saatu vielä luotua. Alla saatu virheilmoitus, näköjään ei kannata käyttää liian vanhoja lähteitä, koska unencrypted pswd:s ei ole tuettuna enään.  
+
+![kuva82](./Pictures/kuva82.png)  
+
+![kuva83](./Pictures/kuva83.png)  
+
+Kävin aluksi poistamassa saltin init.sls -tiedoston user-kohdasta encrypted.  
+
+Ja kuin ihmeen kaupalla se näytti korjaavan koko homman! Eli 4/4 succeed: user luotu ja database luotu.  
+
+![kuva84](./Pictures/kuva84.png)  
+
+Edelleen se valittaa the md5 passwordista, mutta ei välitetä siitä nyt.  
+
+### Testaus
+
+Tietokanta näkyy ja omistajana on määrittelemäni myuser.  
+
+![kuva85](./Pictures/kuva85.png)  
+
+Kokeillaan kirjautua seuraavaksi sisään tietokantaan. Annetaan komento `psql -h localhost -d mydb -U myuser`. Tämä yritys aiheuttaa errorin, eli en pääse käyttäjälle sisään vielä.  
+
+![kuva86](./Pictures/kuva86.png)  
+
 
 
 # Lähteet
