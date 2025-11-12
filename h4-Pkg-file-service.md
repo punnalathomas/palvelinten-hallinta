@@ -375,6 +375,8 @@ Lähtötilanne:
 
 ![kuva79](./Pictures/kuva79.png)  
 
+Ajetaan komento `sudo salt '*' state.apply postgresql`
+
 
 # Lähteet
 
