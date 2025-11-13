@@ -101,7 +101,7 @@ Lähtötilanne:
 1. `sudo apt-get update`
 2. `sudo apt-get install apache2`
 3. `mkdir -p /home/thomas/public-sites/punnala.example.com`
-4. `micro hosts` ->
+4. `micro hosts` ->  
 ![kuva66](./Pictures/kuva66.png)
 5. `cd /home/thomas/public-sites/punnala.example.com`
 6. `micro index.html` ->
@@ -123,7 +123,7 @@ Lähtötilanne:
 ![kuva67](./Pictures/kuva67.png)
 9. `sudo a2ensite punnala.example.com.conf`
 10. `sudo systemctl reload apache2`
-11. `curl localhost` ->
+11. `curl localhost` ->  
 ![kuva68](./Pictures/kuva68.png)
 
 Siinä on asennettuna apache2 web-server ja name based virtual host konfiguroituna (punnala.example.com). Weppisivua pystyy muokkaamaan ilman sudoa ja se sijaitsee käyttäjän Thomas kotihakemistossa. `curl localhost`:illa tarkistettu, että sivu näkyy palvelimen etusivulla.  
@@ -207,10 +207,6 @@ Uusi ongelma ilmeni, eli apache ei pysty lukemaan tiedostoa tai hakemistoa.
 Ongelma oli /home/thomas/ -kansion oikeuksissa. Kävin muokkaamassa tämän salt-tiedostoon ja uuden ajon jälkeen localhost näyttää vihdoinkin oikean sivun!  
 
 ![kuva74](./Pictures/kuva74.png)  
-
-Kävin vielä kokeilemassa ottaa punnala.example.com pois sites-enabled:ista ja ajamalla uudestaa state.apply apache_demo2, sain sen takaisin sites-enabled. 
-
-![kuva75](./Pictures/kuva75.png)  
 
 ![kuva76](./Pictures/kuva76.png)  
 
@@ -369,7 +365,7 @@ database:
     - name: {{ config['db_name'] }}
     - runas: postgres
 ```
-Tässä uusi init.sls -tiedosto salt-kansiossa. Nyt voidaan huomata, että nimien ja salasanojen tilalle on ilmestinyt Jinja-asetukset. Config sisältää pilarin datan, joka haetaan haluttuihin kohtiin.  
+Tässä uusi init.sls -tiedosto salt-kansiossa. Nyt voidaan huomata, että nimien ja salasanojen tilalle on ilmestynyt Jinja-asetukset. Config sisältää pilarin datan, joka haetaan haluttuihin kohtiin.  
 
 Seuraavaksi on aika kokeilla kuinka tämä toimii.  
 
