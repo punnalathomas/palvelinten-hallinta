@@ -76,7 +76,7 @@ Toinen ajo ei tehnyt mitään muutoksia, eli se on idempotentti. Seuraavaksi kok
 
 ![kuva61](./Pictures/kuva61.png)  
 
-Eli SSH-palvelimen avain on vaihtunut, koska poistin ssh-paketin ja asensin sen uudelleen. Korjataan antamalla komento `ssh-keygen -f "/home/thomas/.ssh/known_hosts" -R '[localhost]:8888'`. Tämän jälkeen sisäänkirjautuminen onnistui.  
+Eli SSH-palvelimen avain on vaihtunut, koska poistin ssh-paketin ja asensin sen uudelleen. Korjataan antamalla komento `ssh-keygen -f "/home/thomas/.ssh/known_hosts" -R '[localhost]:8888'`. Tämän jälkeen sisäänkirjautuminen onnistui. (TÄSSÄ KUVASSA KIRJAUTUMINEN EI ONNISTUNUT VIELÄ NÄKÖJÄÄN)  
 
 ![kuva62](./Pictures/kuva62.png)  
 
@@ -89,6 +89,10 @@ Kävin kommentoimassa port 8888 muutoksen pois tiedostosta. Tämän jälkeen aje
 ![kuva64](./Pictures/kuva64.png)  
 
 Komento avasi taas portin 8888 ja potkaisi demonia onnistuneesti.  
+
+Tässä onnistunut sisäänkirjautuminen:  
+
+![kuva89](./Pictures/kuva89.png)   
 
 ## Apache
 
