@@ -15,7 +15,7 @@ update: 11.11.2025
 
 ## Tiivistelmä
 
-Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H4.
+Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H4. Tehtävän alkuosio oli suhteellisen helppo. Siirryttäessä vapaaehtoisiin tehtäviin ongelmia alkoi syntyä paljon enemmän, mutta selvisin niistä lopulta kohtalaisesti. Pääsin myös testaamaan pilareiden toimintaa asentaessani tietokantaa Saltin avulla.
 
 ## Lue ja tiivistä artikkelit
 
@@ -293,6 +293,8 @@ Tietokannan testailua.
 
 ### Automatisoitu
 
+(SaltProject salt.states.postgres_user)  
+
 Aloitin automatisoinnin luomalla uuden kansion polkuun /srv/salt/ komennolla `sudo mkdir postgresql`. Siirryin kyseiseen kansioon käyttämällä cd komentoa. Loin sinne init.sls -tiedoston, mihin alan rakentamaan konfiguraatiota.  
 
 Tämä asennustiedosto mukailee GoDjangon (2019) videolla näkyvää tiedostoa:  
@@ -418,7 +420,62 @@ Kokeillaan kirjautua seuraavaksi sisään tietokantaan. Annetaan komento `psql -
 
 ![kuva86](./Pictures/kuva86.png)  
 
-Ongelma tuntuu olevan password algorithmissa. Minun täytyisi saada salasana 
+Löysin /etc/ -polusta posgresql.conf tiedoston, jota muokkasin hieman. Poistin kommentin kohdasta -> password_encryption = scram-sha-256. Kopioin tiedoston salt-kansiooni ja lisäsin file.managed osion sinne ja service.running:in katsomaan conffi tiedostoa. Lisäsin myös user.present kohtaan encryption: scram-sha-256.  
+
+![kuva87](./Pictures/kuva87.png)  
+
+Nyt toimii! Eli tietokanta ja käyttäjä salasanalla luotiin onnistuneesti. Nyt pystyin kirjautumaan suoraan tietokantaan kun asennus oli valmis. Tässä viimeisin versio /srv/salt/postgresql/init.sls -tiedostosta:  
+
+```
+{% set config = pillar.get('postgresql', {}) %}
+
+postgresql:
+  pkg.installed:
+    - pkgs:
+      - postgresql
+      - postgresql-client
+
+/etc/postgresql/17/main/postgresql.conf:
+  file.managed:
+    - source: salt://postgresql/postgresql.conf
+
+postgresql-service:
+  service.running:
+    - name: postgresql
+    - enable: True
+    - watch:
+      - file: /etc/postgresql/17/main/postgresql.conf
+
+user:
+  postgres_user.present:
+    - name: {{ config['user'] }}
+    - password: {{ config['password'] }}
+    - encrypted: scram-sha-256
+    - superuser: False
+    - login: True
+    - runas: postgres
+
+database:
+  postgres_database.present:
+    - owner: {{ config['user'] }}
+    - name: {{ config['db_name'] }}
+    - runas: postgres
+```
+Pilareista löytyvä tiedosto:  
+
+```
+postgresql:
+  user: myuser
+  password: password
+  db_name: mydb
+```
+
+Tietokannan testaus:  
+
+![kuva88](./Pictures/kuva88.png)
+
+
+
 
 # Lähteet
 
@@ -429,6 +486,8 @@ Heinonen, J. 2025. Apache2. Luettavissa: https://github.com/johannaheinonen/joha
 Karvinen, T. 2025. Palvelinten hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/#h4-pkg-file-service. Luettu: 11.11.2025  
 
 Karvinen, T. 2018. Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port. Luettavissa: https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh. Luettu: 11.11.2025  
+
+SaltProject. salt.states.postgres_user. Luettavissa: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.postgres_user.html. Luettu: 13.11.2025  
 
 Wiki.Debian. PosgreSql. Luettavissa: https://wiki.debian.org/PostgreSql. Luettu: 11.11.2025  
 
