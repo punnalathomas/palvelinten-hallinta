@@ -58,6 +58,120 @@ Viimeisin committi on nimetty: improve usage instuctions. Muutokset on tehty tie
 
 ## Tehtävät
 
+### Online
+
+Lähdettiin luomaan uutta repositorya Githubiin. Alla olevassa kuvassa on repon asetukset. Tärkeimmät ovat: nimessä Snow ja licence on GNU General Public Licence 3.  
+
+![kuva90](./Pictures/kuva90.png)  
+
+Readme-tiedostoon lisätty jälkeenpäin teksti: "There is snow outside.".  
+
+### Dolly
+
+Kloonataan äsken luotu varasto virtuaalikoneelle. Aloitetaan käyttäjän kotihakemistosta ja ajetaan komento `git clone git@github.com:punnalathomas/snow-the-test-repository.git`. Tässä käytettiin SSH-yhteyttä, jolloin voimme puskea muutokset etärepoon virtuaalikoneesta.  
+
+![kuva91](./Pictures/kuva91.png)  
+
+Seuraavaksi lähdetään tekemään lokaalisti muutoksia repositoryyn. Luodaan Hello World tiedosto komennolla `micro helloworld.md` ja annetaan sisällöksi "Hello World".  
+
+![kuva92](./Pictures/kuva92.png)  
+
+Etärepositoryn lähtötilanne:  
+
+![kuva93](./Pictures/kuva93.png)  
+
+Lähdetään puskemaan muutokset etärepoon lokaalilta koneelta. Annetaan komennot:  
+
+1. `git add .`
+2. `git commit -m add helloworld.md (commit viesti olisi pitänyt kirjoittaa lainausmerkkeihin "")
+3. `git push`
+
+![kuva94](./Pictures/kuva94.png)  
+
+![kuva95](./Pictures/kuva95.png)  
+
+### Doh!
+
+Tehdään hölmö muutos ja peruutetaan se komennolla `git reset --hard`.  
+
+![kuva96](./Pictures/kuva96.png)  
+
+![kuva97](./Pictures/kuva97.png)  
+
+### Tukki
+
+Tutkitaan repositoryn lokia komennolla `git log --patch`.  
+
+![kuva98](./Pictures/kuva98.png)  
+
+Nimi ja sähköposti näkyvät oikein.  
+
+Alimpana näkyy initail commit, joka sisältää lisenssin ja README-tiedoston lisäyksen.  
+
+Seuraava commit on README:n päivitys, eli lisäsin tekstiä siihen.  
+
+Uusin commit näyttää helloworld.md -tiedoston luonnin ja sen sisällön.  
+
+Lokista voidaan myös huomata, että commit:ien nimet ovat hash-tunnisteita. Jokaisessa commitissa näkyy myös kyseisen muutoksen tekijän nimi ja sähköpostiosoite, sekä päivämäärä ja aika.  
+
+### Suolattu rakki
+
+Aloitetaan luomalla aikaisemmin luotuun repositoryyn kansiot srv ja salt, eli `mkdir -p srv/salt`.  
+
+![kuva99](./Pictures/kuva99.png)  
+
+Siirrytään kansioon salt ja luodaan top.sls -tiedosto sinne. Annetaan sisällöksi:  
+
+```
+base:
+  '*':
+    - test.test
+```  
+
+![kuva100](./Pictures/kuva100.png)  
+
+Tämän jälkeen salt-kansion sisällö test-kansio ja sinne test.sls -tiedosto, jonka sisältö on seuraavanlainen:  
+
+```
+hello:
+  cmd.run:
+    - name: echo "Hello World"
+```
+Seuraavaksi kokeillaan ajaa repon juuresta Salt-komentoa. `sudo salt-call --local --file-root ./srv/salt state.apply`. Voimme myös käyttää absoluuttista polkua mistä tahansa, eli `sudo salt-call --local --file-root /home/thomas/snow-the-test-repository/srv/salt state.apply`.  
+
+![kuva101](./Pictures/kuva101.png)  
+
+Seuraavaksi ajetaan muutokset etärepoon komennoilla:  
+
+1. git add .
+2. git commit -m "add top.sls and test.sls"
+3. git pull
+4. git push
+
+![kuva102](./Pictures/kuva102.png)  
+
+### Pari projektiin
+
+Pari löydetty: [nlholm](https://github.com/nlholm)  
+
+### Collaboration
+
+Projektiparini Niina oli jo luonut testi repon meille ja kävin hyväksymässä kutsun Githubin kautta. Nyt testaan voinko tehdä muutoksia koneeltani sinne.  
+
+1. cd
+2. git clone git@github.com:nlholm/linux-test.git
+3. cd linux-test/
+4. ls
+5. nano moro.md
+6. git add .
+7. git commit -m "add moro.md"
+8. git pull
+9. git push
+
+![kuva103](./Pictures/kuva103.png)  
+
+![kuva104](./Pictures/kuva104.png)  
+
 
 
 
