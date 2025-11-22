@@ -15,7 +15,7 @@ update: 22.11.2025
 
 ## Tiivistelmä
 
-Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H5. 
+Tämän raportin tavoitteet löytyvät Karvisen (2025) Palvelinten hallinta verkkosivulta kohdasta H5. Tässä raportissa tutustutaan Gitin käyttöön ja sen yleisimpiin komentoihin, kuten add, commit, push, pull ja clone. Aikaa raportin ja tehtävien tekemiseen meni noin kaksi tuntia.  
 
 ## Lue ja tiivistä artikkelit
 
