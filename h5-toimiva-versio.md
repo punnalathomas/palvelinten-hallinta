@@ -46,7 +46,7 @@ Gitin kolme tilaa ovat:
 
 Kirjauduin virtuaalikoneelleni ja kloonasin Karvisen Suolax-repositoryn (2024) ajamalla komennon `git clone git@github.com:terokarvinen/suolax.git`. Tämän jälkeen `git log --patch --color|less -R`.  
 
-![kuva89](./Pictures/kuva89.png)  
+![kuva89](./Pictures/kuva200.png)  
 
 Viimeisin committi on nimetty: improve usage instuctions. Muutokset on tehty tiedostoon README.md. Käyttöohjeita muokattiin seuraavasti:  
 
