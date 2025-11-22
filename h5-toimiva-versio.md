@@ -131,7 +131,7 @@ base:
 ![kuva100](./Pictures/kuva100.png)  
 Huom kuvassa näkyy nimenä vain "-test", tämä on jälkeenpäin muutettu muotoon "-test.test".  
 
-Tämän jälkeen salt-kansion sisällö test-kansio ja sinne test.sls -tiedosto, jonka sisältö on seuraavanlainen:  
+Tämän jälkeen salt-kansion sisälle luodaan test-kansio ja sinne test.sls -tiedosto, jonka sisältö on seuraavanlainen:  
 
 ```
 hello:
